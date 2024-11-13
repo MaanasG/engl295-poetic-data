@@ -10,6 +10,11 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const images = {
+    3: 'gpa.jpg', // Load image paths directly on frontend
+    8: 'skill.png',
+  };
+
   // Mapping of endings to their descriptions
   const endings = {
     "Corporate Overachiever Ending": `You’re working at a top tech company, making a six-figure salary, but you’re constantly stressed and overworked. You’ve reached the top of your career, but you feel burned out and disconnected from personal passions. The journey was fast and lucrative, but you sacrificed a lot in terms of personal fulfillment.`,
@@ -19,14 +24,11 @@ function App() {
     "Mid-Career Crisis Ending": `After a few years of working at a high-paying corporate job, you’ve hit a plateau. You’re starting to question whether the financial success was worth the sacrifices made along the way. You’re considering a major life change or perhaps returning to school for a new challenge.`
   };
 
-  // Handle input changes for user details
   const handleUserDetailsChange = (e) => {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
 
-  // Start the journey by fetching personalized stages
   const handleStart = async () => {
-    // Basic validation
     if (!userDetails.college.trim() || !userDetails.hobbies.trim()) {
       setError('Please fill in both your college and hobbies.');
       return;
@@ -47,18 +49,20 @@ function App() {
     }
   };
 
-  // Handle option selection and update weights
   const handleOptionClick = (option) => {
-    const newWeights = {
-      career: weights.career + (option.weight.career || 0),
-      balance: weights.balance + (option.weight.balance || 0),
-      learning: weights.learning + (option.weight.learning || 0),
-    };
-    setWeights(newWeights);
-    setCurrentStage(currentStage + 1);
+    if (currentStage === 9 && option.text.toLowerCase().includes("lie")){  // Career-defining choice in Stage 9
+      throw new Error("The journey ends here due to an irreversible choice.");  // Redirect to 404 if they choose "Drop out"
+    } else {
+      const newWeights = {
+        career: weights.career + (option.weight.career || 0),
+        balance: weights.balance + (option.weight.balance || 0),
+        learning: weights.learning + (option.weight.learning || 0),
+      };
+      setWeights(newWeights);
+      setCurrentStage(currentStage + 1);
+    }
   };
 
-  // Determine the ending based on weights
   const calculateEnding = () => {
     const { career, balance, learning } = weights;
     if (career > balance && career > learning) {
@@ -70,7 +74,6 @@ function App() {
     return { title: "Mid-Career Crisis Ending", description: endings["Mid-Career Crisis Ending"] };
   };
 
-  // Restart the journey
   const restartJourney = () => {
     setCurrentStage(0);
     setWeights({ career: 0, balance: 0, learning: 0 });
@@ -91,7 +94,6 @@ function App() {
             className="bg-gray-800 p-8 rounded-lg shadow-xl"
           >
             {currentStage === 0 ? (
-              // Initial Screen: Collect User Details
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -132,7 +134,6 @@ function App() {
                 </div>
               </motion.div>
             ) : currentStage <= stages.length ? (
-              // Display Current Stage with Options
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -146,6 +147,13 @@ function App() {
                 <h2 className="text-2xl font-semibold text-center mb-8">
                   {stages[currentStage - 1].question}
                 </h2>
+                {images[currentStage] && (
+                  <img
+                    src={images[currentStage]}
+                    alt="Stage illustration"
+                    className="w-full mb-4"
+                  />
+                )}
                 <div className="space-y-4">
                   {stages[currentStage - 1].options.map((option, idx) => (
                     <button
@@ -159,7 +167,6 @@ function App() {
                 </div>
               </motion.div>
             ) : (
-              // Display Ending with Description
               (() => {
                 const ending = calculateEnding();
                 return (

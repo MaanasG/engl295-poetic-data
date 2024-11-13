@@ -1,5 +1,3 @@
-// server.js
-
 const express = require('express');
 const OpenAI = require('openai');
 const cors = require('cors');
@@ -35,15 +33,16 @@ const originalStages = [
     ]
   },
   {
-    quote: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+    quote: "I remember my first semester—I showed up hungover one day and thought I could wing it. Let's just say, I didn't know 'CS' also stood for 'Constant Struggle.' - Andrew L.",
     question: "It's your first semester, and you're already behind in one of your CS courses. You woke up hungover on a Monday morning. Do you...",
     options: [
       { text: "Go to class hungover. 'Who knows how much you'll even pay attention?'", weight: { career: 3, balance: 5, learning: 7 } },
       { text: "Skip class and rejuvenate. 'You can always study at home.'", weight: { career: 2, balance: 7, learning: 4 } }
-    ]
+    ],
+    imagePath: "public/gpa.jpg"
   },
   {
-    quote: "Alone we can do so little; together we can debug so much.",
+    quote: "Back in the day, I spent every weekend debugging with classmates. We called it ‘bonding through bugs.’ - Devinder S.",
     question: "You meet a group of classmates who invite you to work on a side project together. Do you...",
     options: [
       { text: "Join the project and build your network. 'Extra work but great hands-on experience!'", weight: { career: 7, balance: 5, learning: 8 } },
@@ -59,7 +58,7 @@ const originalStages = [
     ]
   },
   {
-    quote: "The only way to do great work is to love what you learn.",
+    quote: "In my first few years, I said 'yes' to every extra course. By year three, I was as burnt out as my laptop’s motherboard. - Kavita R.",
     question: "You're offered an optional course on blockchain technology. Do you...",
     options: [
       { text: "Take the course to expand your knowledge and skill set. 'The more skills the better!'", weight: { career: 6, balance: 3, learning: 10 } },
@@ -83,11 +82,11 @@ const originalStages = [
     ]
   },
   {
-    quote: "Honesty is the first chapter in the book of wisdom.",
+    quote: "I lied once in an interview about knowing a language. Three weeks in, my manager realized I didn’t. Most stressful month of my life. - Paul N.",
     question: "You meet a recruiter at a tech event who asks if you've worked with a specific programming language. Do you...",
     options: [
       { text: "Lie and say you have experience with it. 'Whatever it takes to impress!'", weight: { career: 8, balance: 2, learning: 4 } },
-      { text: "Be honest and admit you haven't worked with it yet. 'You wouldn't want to lie.'", weight: { career: 5, balance: 7, learning: 5 } }
+      { text: "Be honest and admit you haven't worked with it yet.", weight: { career: 5, balance: 7, learning: 5 } }
     ]
   },
   {
@@ -96,7 +95,8 @@ const originalStages = [
     options: [
       { text: "Stick with the internship, even though it's challenging. 'Hard work pays off!'", weight: { career: 9, balance: 3, learning: 5 } },
       { text: "Drop out and focus on your coursework. 'You know what's best.'", weight: { career: 4, balance: 8, learning: 7 } }
-    ]
+    ],
+    imagePath: "public/skill.png"
   },
   {
     quote: "Research is what I'm doing when I don't know what I'm doing.",
